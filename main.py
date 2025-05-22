@@ -1,12 +1,12 @@
+import csv
 import os
 import copy
 import argparse
 import numpy as np
+
 import torch
-import csv
-from torch import nn
+import torch.nn as nn
 from torch.utils.data import DataLoader
-from opacus import PrivacyEngine
 
 from update import LocalUpdate
 from models import CNNMnist, CNNCifar
@@ -148,18 +148,3 @@ for epoch in range(args.global_ep):
     print(f' \n Results after {epoch+1} global rounds of training:', flush=True)
     print("|---- Avg Train Accuracy: {:.2f}%".format(100*train_accuracy[-1]), flush=True)
     print("|---- Test Accuracy: {:.2f}%".format(100*test_acc), flush=True)
-
-file_name = f"results/{args.partition}/main/{args.dataset}.csv"
-os.makedirs(os.path.dirname(file_name), exist_ok=True)
-with open(file_name, mode='a') as file:
-    writer = csv.writer(file)
-    if args.activation != 'tempered':
-        if not args.disable_dp:
-            writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp, args.epsilon, args.delta, args.max_norm, noise_multiplier), args.activation, 100*test_acc])
-        else:
-            writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp), args.activation, 100*test_acc])
-    else:
-        if not args.disable_dp:
-            writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp, args.epsilon, args.delta, args.max_norm, noise_multiplier), (args.activation, args.scale, args.temp, args.offset), 100*test_acc])
-        else:
-            writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp), (args.activation, args.scale, args.temp, args.offset), 100*test_acc])

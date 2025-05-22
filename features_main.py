@@ -2,11 +2,11 @@ import os
 import copy
 import argparse
 import numpy as np
+
 import torch
-import csv
-from opacus import PrivacyEngine
-from torch.utils.data import DataLoader
 import torch.nn as nn
+from torch.utils.data import DataLoader
+
 from update import LocalUpdate
 from models import ScatterCNN, ScatterLinear
 from utils import get_dataset, average_weights, exp_details
@@ -158,12 +158,3 @@ for epoch in range(args.global_ep):
     print(f' \n Results after {epoch+1} global rounds of training:')
     print("|---- Avg Train Accuracy: {:.2f}%".format(100*train_accuracy[-1]))
     print("|---- Test Accuracy: {:.2f}%".format(100*test_acc))
-
-file_name = f"results/{args.partition}/features_main/{args.dataset}.csv"
-os.makedirs(os.path.dirname(file_name), exist_ok=True)
-with open(file_name, mode='a') as file:
-    writer = csv.writer(file)
-    if not args.disable_dp:
-        writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp, args.epsilon, args.delta, args.max_norm, noise_multiplier), args.model, 100*test_acc])
-    else:
-        writer.writerow([args.dataset, args.global_ep, args.local_ep, args.local_bs, args.optimizer, args.lr, args.num_users, (not args.disable_dp), args.model, 100*test_acc])

@@ -1,6 +1,5 @@
 import argparse
 import torch
-import csv
 from torch.utils.data import DataLoader
 from opacus import PrivacyEngine
 
@@ -132,18 +131,3 @@ for epoch in range(args.epochs):
 
     test_acc, test_loss = test_inference(model, test_dataset, device)
     print("Test Accuracy: {:.2f}%".format(100*test_acc), flush=True)
-
-file_name = f"base/{args.dataset}.csv"
-os.makedirs(os.path.dirname(file_name), exist_ok=True)
-with open(file_name, mode='a') as file:
-    writer = csv.writer(file)
-    if args.activation != 'tempered':
-        if not args.disable_dp:
-            writer.writerow([args.dataset, args.epochs, args.batch_size, args.optimizer, args.lr, (not args.disable_dp, args.epsilon, args.delta, args.max_norm, optimizer.noise_multiplier), args.activation, 100*test_acc])
-        else:
-            writer.writerow([args.dataset, args.epochs, args.batch_size, args.optimizer, args.lr, (not args.disable_dp), args.activation, 100*test_acc])
-    else:
-        if not args.disable_dp:
-            writer.writerow([args.dataset, args.epochs, args.batch_size, args.optimizer, args.lr, (not args.disable_dp, args.epsilon, args.delta, args.max_norm, optimizer.noise_multiplier), (args.activation, args.scale, args.temp, args.offset), 100*test_acc])
-        else:
-            writer.writerow([args.dataset, args.epochs, args.batch_size, args.optimizer, args.lr, (not args.disable_dp), (args.activation, args.scale, args.temp, args.offset), 100*test_acc])
