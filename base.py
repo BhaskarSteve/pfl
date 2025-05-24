@@ -1,7 +1,8 @@
 import argparse
+
 import torch
-from torch.utils.data import DataLoader
 from opacus import PrivacyEngine
+from torch.utils.data import DataLoader
 
 from utils import get_dataset
 from models import CNNMnist, CNNCifar

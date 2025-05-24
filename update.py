@@ -1,6 +1,6 @@
 import torch
-from opacus import PrivacyEngine
 import torch.nn as nn
+from opacus import PrivacyEngine
 from torch.utils.data import DataLoader, Dataset
 
 

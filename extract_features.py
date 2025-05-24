@@ -1,9 +1,9 @@
 import argparse
+
 import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader
 from kymatio.torch import Scattering2D
 
+from base import args
 from utils import get_dataset, compute_scattering_features
 
 parser = argparse.ArgumentParser()
